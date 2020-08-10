@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <script src="./js/bootstrap.js" rel="script"></script>
+    <script src="./js/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+<div class="container" style="margin: 50px auto">
+    <div class="row">
+        <a href="./index.html">Назад</a>
+    </div>
+    <div class="row">
+        <table class="table" id="tasks">
+            <thead>
+            <tr>
+                <th scope="col">post_key</th>
+                <th>result_url</th>
+                <th scope="col">result_title</th>
+                <th scope="col">loc_id</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function (e) {
+        var table = $('#tasks tbody');
+        var url = new URL(window.location.href);
+        var id = url.searchParams.get("id");
+        if (id) {
+            $.ajax({
+                url: 'http://192.168.1.113/api/info?id='+id,
+                type: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    $.each(response,function (i,item) {
+                        var tr = document.createElement('tr');
+                        $.each(item, function (j,elem) {
+                            var td = document.createElement('td');
+                            td.innerText = elem;
+                            tr.append(td)
+                        });
+                        table.append(tr)
+                    });
+                }, error: function (error) {
+                    alert(error.message);
+                }
+            });
+        }
+    })
+</script>
+</body>
+</html>

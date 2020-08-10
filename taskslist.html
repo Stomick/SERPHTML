@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <script src="./js/bootstrap.js" rel="script"></script>
+    <script src="./js/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+<div class="container" style="margin: 50px auto">
+    <div class="row">
+        <a href="./index.html">Назад</a>
+    </div>
+    <div class="row">
+        <table class="table" id="tasks">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">ID</th>
+                <th scope="col">Статус</th>
+                <th scope="col">Ключевое слово</th>
+                <th scope="col">ID задачи</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function (e) {
+        var table = $('#tasks tbody');
+        $.ajax({
+            url: 'http://192.168.1.113/api/requests',
+            type: 'get',
+            dataType: 'json',
+            success: function (response) {
+                $.each(response,function (i,item) {
+                    var tr = document.createElement('tr');
+                    tr.innerHTML = '<td><input type="button" value="Получить данные" onclick="getInfo('+item.task_id + ',' + item.id+')"></td>';
+                    $.each(item, function (j,elem) {
+                        var td = document.createElement('td');
+                        switch (j) {
+                            case 'task_id':
+                                if(item.filled==1) {
+                                    td.innerHTML = "<a type='button' href='./taskinfo.html?id=" + elem + "'>Посмотреть</a>";
+                                }else {
+                                    td.id=elem;
+                                    td.innerHTML = "Данных нет";
+                                }
+                                break;
+                            case 'filled':
+                                break;
+                            default:
+                                td.innerText = elem;
+                        }
+                        tr.append(td)
+                    });
+                    table.append(tr)
+                });
+            }, error: function (error) {
+                alert(error);
+            }
+        });
+    })
+    function getInfo(id,req_id) {
+        if (id) {
+            $.ajax({
+                url: 'http://192.168.1.113/api/getinfo?id='+id + '&req_id=' + req_id,
+                type: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    var td = document.getElementById(id);
+                    td.innerHTML = "<a type='button' href='./taskinfo.html?id=" + id + "'>Посмотреть</a>";
+                }, error: function (error) {
+                    console.log(error)
+                    alert(error.responseJSON.message);
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

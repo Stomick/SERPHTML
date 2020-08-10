@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <script src="./js/bootstrap.js" rel="script"></script>
+    <script src="./js/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+<div class="container" style="margin: 50px auto">
+    <div class="row">
+        <a href="./taskslist.html">Все задачи</a>
+    </div>
+    <div class="row">
+        <form id="searchForm">
+            <div class="row">
+                <div class="col">
+                    <label>Ключевое слово
+                        <input type="text" name="Req[keyword]" class="form-control" required/>
+                    </label>
+                </div>
+                <div class="col">
+                    <label>Поисковая система
+                        <select class="form-control" name="Req[search]" required>
+                            <option value="google.com">Гугл</option>
+                            <option value="yandex.com">Yahoo</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="col">
+                    <label>Регион поиска
+                        <select class="form-control" name="Req[region]" required>
+                            <option value="United States">United States</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="col">
+                    <label>
+                        <input type="button" id="search" value="Искать"/>
+                    </label>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $('#search').on('click', function (e) {
+        var get = true;
+        $.each($('#searchForm').serializeArray(),function (i,item) {
+            if(item.value==''){
+                get=false;
+                alert('Не все поля выбраны!');
+                return;
+            }
+        });
+        if(get) {
+            $.ajax({
+                url: 'http://192.168.1.113/api/requests',
+                type: 'post',
+                data: $('#searchForm').serializeArray(),
+                dataType: 'json',
+                success: function (response) {
+                    alert(response.success);
+                }, error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+    })
+</script>
+</body>
+</html>
