@@ -32,7 +32,7 @@
     $(document).ready(function (e) {
         var table = $('#tasks tbody');
         $.ajax({
-            url: 'http://192.168.1.113/api/requests',
+            url: 'http://178.150.176.91/api/requests',
             type: 'get',
             dataType: 'json',
             success: function (response) {
@@ -67,7 +67,7 @@
     function getInfo(id,req_id) {
         if (id) {
             $.ajax({
-                url: 'http://192.168.1.113/api/getinfo?id='+id + '&req_id=' + req_id,
+                url: 'http://178.150.176.91/api/getinfo?id='+id + '&req_id=' + req_id,
                 type: 'get',
                 dataType: 'json',
                 success: function (response) {
